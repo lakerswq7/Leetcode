@@ -25,4 +25,3 @@ public class Candy {
         return sum;
     }
 }
-
