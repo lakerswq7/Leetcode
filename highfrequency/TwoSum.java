@@ -4,26 +4,16 @@ import java.util.HashMap;
 
 public class TwoSum {
     public int[] twoSum(int[] numbers, int target) {
-        int[] index = new int[2];
-        if ((numbers == null) || (numbers.length < 2)) {
-            return index;
-        }
-        HashMap<Integer, Integer> diff = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> comp = new HashMap<Integer, Integer>();
+        int[] result = new int[]{0, 0};
         for (int i = 0; i < numbers.length; i++) {
-            diff.put(target - numbers[i], i);
-        }
-        for (int i = 0; i < numbers.length; i++) {
-            if (diff.containsKey(numbers[i])) {
-                int ind = diff.get(numbers[i]);
-                if (i > ind) {
-                    index[0] = ind + 1;
-                    index[1] = i + 1;
-                } else if (i < ind) {
-                    index[0] = i + 1;
-                    index[1] = ind + 1;
-                }
+            if (comp.containsKey(numbers[i])) {
+                result[0] = comp.get(numbers[i]) + 1;
+                result[1] = i + 1;
+            } else {
+                comp.put(target - numbers[i], i);
             }
         }
-        return index;
+        return result;
     }
 }

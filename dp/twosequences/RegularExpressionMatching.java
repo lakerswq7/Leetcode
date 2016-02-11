@@ -9,33 +9,53 @@ public class RegularExpressionMatching {
         if (p.length() == 0) {
             return s.length() == 0;
         }
-        int si = 0, pi = 0;
-        int m = s.length();
-        int n = p.length();
-        while (si < m) {
-            if (pi == n) {
-                return false;
-            }
-            if (pi + 1 < n && p.charAt(pi + 1) == '*') {
-                while (si < m && (s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.')) {
-                    if (isMatch(s.substring(si), p.substring(pi + 2))) {
-                        return true;
-                    }
-                    si++;
-                }
-                return isMatch(s.substring(si), p.substring(pi + 2));
-            } else if (s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.') {
-                si++;
-                pi++;                
-            } else {
-                return false;
-            }
+        if (p.length() == 1) {
+            return s.length() == 1 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.');
         }
-        while (pi + 1 < n && p.charAt(pi + 1) == '*') {
-            pi += 2;
+        if (p.charAt(1) == '*') {
+            if (isMatch(s, p.substring(2))) {
+                return true;
+            }
+            return s.length() > 0 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.') && isMatch(s.substring(1), p);
+        } else {
+            return s.length() > 0 && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.') && isMatch(s.substring(1), p.substring(1));
         }
-        return pi == n;
     }
+	// 不直观的递归
+//    public boolean isMatch(String s, String p) {
+//        if (s == null || p == null) {
+//            return false;
+//        }
+//        if (p.length() == 0) {
+//            return s.length() == 0;
+//        }
+//        int si = 0, pi = 0;
+//        int m = s.length();
+//        int n = p.length();
+//        while (si < m) {
+//            if (pi == n) {
+//                return false;
+//            }
+//            if (pi + 1 < n && p.charAt(pi + 1) == '*') {
+//                while (si < m && (s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.')) {
+//                    if (isMatch(s.substring(si), p.substring(pi + 2))) {
+//                        return true;
+//                    }
+//                    si++;
+//                }
+//                return isMatch(s.substring(si), p.substring(pi + 2));
+//            } else if (s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.') {
+//                si++;
+//                pi++;                
+//            } else {
+//                return false;
+//            }
+//        }
+//        while (pi + 1 < n && p.charAt(pi + 1) == '*') {
+//            pi += 2;
+//        }
+//        return pi == n;
+//    }
 	// dp 解法，时间空间均为 O(n ^ 2)
 //    public boolean isMatch(String s, String p) {
 //        if (s == null || p == null) {

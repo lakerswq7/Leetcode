@@ -1,17 +1,14 @@
 package array;
 
 public class RemoveDuplicatesFromSortedArray {
-    public int removeDuplicates(int[] A) {
-        int length = 0;
-        for (int i = 0; i < A.length; i++) {
-            if (i == A.length - 1) {
-                A[length] = A[i];
-                length++;
-            } else if (A[i] != A[i + 1]) {
-                A[length] = A[i];
-                length++;
+    public int removeDuplicates(int[] nums) {
+        int len = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i == nums.length - 1 || nums[i] != nums[i + 1]) {
+                nums[len] = nums[i];
+                len++;
             }
         }
-        return length;
+        return len;
     }
 }
