@@ -1,7 +1,8 @@
 package dp.twosequences;
 
 public class WildcardMatching {
-	// 优化的递归思路非递归解法，复杂度，好的时候O(n), 坏的时候O(n ^ 2)
+	// 优化的递归思路非递归解法，复杂度，好的时候O(n), 坏的时候O(n ^ 2). 核心思想是，如果 * 后面出现了 * 那么就只用从后面的序列
+	// 去找可能的解法，如果后面都不能解得话，那也没必要往前面的 * 回溯了。
     public boolean isMatch(String s, String p) {
         if ((s == null) || (p == null)) {
             return false;

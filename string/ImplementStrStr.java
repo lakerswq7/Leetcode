@@ -8,7 +8,7 @@ public class ImplementStrStr {
         if (needle.length() == 0) {
             return 0;
         }
-//        构建失配函数
+//        KMP算法 构建失配函数
 //        int[] T = new int[needle.length()];
 //        for (int i = 0; i < needle.length(); i++) {
 //            if (i == 0) {
@@ -22,14 +22,16 @@ public class ImplementStrStr {
 //            }
 //        }
         int gap = 1;
+        int start = 0;
         for (int i = 0; i < haystack.length(); i = i + gap) {
-            for (int j = 0; j < needle.length(); j++) {
+            for (int j = start; j < needle.length(); j++) {
                 if (i + j >= haystack.length()) {
                     return -1;
                 }
                 if (needle.charAt(j) != haystack.charAt(i + j)) {
-//                	计算往后移的值
+//                	计算往后移的值 和 移完了以后的起始考察位
 //                	gap = j - T[j];
+//                  start = j == 0 ? 0 : T[j];
                     break;
                 }
                 if (j == needle.length() - 1) {

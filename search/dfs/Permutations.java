@@ -4,30 +4,29 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Permutations {
-    public List<List<Integer>> permute(int[] num) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        if ((num == null) || (num.length == 0)) {
-            return result;
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> rst = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length == 0) {
+            return rst;
         }
-        List<Integer> list = new ArrayList<Integer>();
-        int[] visited = new int[num.length];
-        getPermutation(result, list, visited, num);
-        return result;
+        boolean[] visited = new boolean[nums.length];
+        getPerm(rst, new ArrayList<Integer>(), nums, visited);
+        return rst;
     }
-    public void getPermutation(List<List<Integer>> result, List<Integer> list, int[] visited, int[] num) {
-        if (list.size() == num.length) {
-            result.add(new ArrayList<Integer>(list));
+    private void getPerm(List<List<Integer>> rst, List<Integer> list, int[] nums, boolean[] visited) {
+        if (list.size() == nums.length) {
+            rst.add(new ArrayList<Integer>(list));
             return;
         }
-        for(int i = 0; i < num.length; i++) {
-            if (visited[i] == 1) {
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) {
                 continue;
             }
-            list.add(num[i]);
-            visited[i] = 1;
-            getPermutation(result, list, visited, num);
+            list.add(nums[i]);
+            visited[i] = true;
+            getPerm(rst, list, nums, visited);
             list.remove(list.size() - 1);
-            visited[i] = 0;
+            visited[i] = false;
         }
     }
 }

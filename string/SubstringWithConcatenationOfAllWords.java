@@ -5,27 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 // 所谓的窗口法，sliding window的思路
 public class SubstringWithConcatenationOfAllWords {
-    public List<Integer> findSubstring(String S, String[] L) {
+    public List<Integer> findSubstring(String s, String[] words) {
         List<Integer> rst = new ArrayList<Integer>();
-        if (S == null || L == null || S.length() == 0 || L.length == 0) {
+        if (s == null || s.length() == 0 || words == null || words.length == 0) {
             return rst;
         }
-        HashMap<String, Integer> map = new HashMap<String, Integer>();
-        int m = L.length;
-        int n = L[0].length();
-        for (String l : L) {
-            if (map.containsKey(l)) {
-                map.put(l, map.get(l) + 1);
-            } else {
-                map.put(l, 1);
-            }
-        }
+        int m = words.length;
+        int n = words[0].length();
+        HashMap<String, Integer> map = getMap(words);
         for (int i = 0; i < n; i++) {
             int start = i;
             int end = i;
             HashMap<String, Integer> dic = new HashMap<String, Integer>(map);
-            while (end + n <= S.length()) {
-                String temp = S.substring(end, end + n);
+            while (end + n <= s.length() && start + n * m <= s.length()) {
+                String temp = s.substring(end, end + n);
                 if (dic.containsKey(temp)) {
                     if (dic.get(temp) == 1) {
                         dic.remove(temp);
@@ -35,19 +28,17 @@ public class SubstringWithConcatenationOfAllWords {
                     end += n;
                 } else {
                     if (start < end) {
-                        String first = S.substring(start, start + n);
+                        String first = s.substring(start, start + n);
                         if (dic.containsKey(first)) {
                             dic.put(first, dic.get(first) + 1);
                         } else {
                             dic.put(first, 1);
                         }
+                        start += n;
                     } else {
                         end += n;
+                        start += n;
                     }
-                    start += n;
-                }
-                if (start + n * m > S.length()) {
-                	break;
                 }
                 if (dic.size() == 0) {
                     rst.add(start);
@@ -56,10 +47,15 @@ public class SubstringWithConcatenationOfAllWords {
         }
         return rst;
     }
-    public static void main(String[] args) {
-    	SubstringWithConcatenationOfAllWords sol = new SubstringWithConcatenationOfAllWords();
-    	String a = "abaababbaba";
-    	String[] b = new String[]{"ab","ba","ab","ba"};
-    	System.out.println(sol.findSubstring(a, b));
+    private HashMap<String, Integer> getMap(String[] words) {
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        for (String w : words) {
+            if (map.containsKey(w)) {
+                map.put(w, map.get(w) + 1);
+            } else {
+                map.put(w, 1);
+            }
+        }
+        return map;
     }
 }

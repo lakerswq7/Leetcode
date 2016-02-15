@@ -10,22 +10,21 @@ package dp.sequence;
  * 优化，因为只跟前面两个值有关，所以可以只用两个数代替
  */
 public class JumpGameII {
-    public int jump(int[] A) {
-        if ((A == null) || (A.length <= 1)) {
+    public int jump(int[] nums) {
+        if (nums == null || nums.length <= 1) {
             return 0;
         }
-        int last = -1;
+        int step = 0;
         int max = 0;
-        int jump = 0;
-        
+        int lastMax = 0;
         for (int i = 0; i <= max; i++) {
-            if (i > last) {
-                last = max;
-                jump++;
+            max = Math.max(max, nums[i] + i);
+            if (max >= nums.length - 1) {
+                return step + 1;
             }
-            max = Math.max(max, i + A[i]);
-            if (max >= A.length - 1) {
-                return jump;
+            if (i == lastMax) {
+                lastMax = max;
+                step++;
             }
         }
         return -1;

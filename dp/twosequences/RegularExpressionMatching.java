@@ -1,7 +1,7 @@
 package dp.twosequences;
 
 public class RegularExpressionMatching {
-	// 递归解法，好时O(n), 坏时O(n!)
+	// 递归解法，好时O(n), 坏时O(2 ^ n)
     public boolean isMatch(String s, String p) {
         if (s == null || p == null) {
             return false;
