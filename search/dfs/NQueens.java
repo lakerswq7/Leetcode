@@ -4,48 +4,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NQueens {
-    public List<String[]> solveNQueens(int n) {
-        List<String[]> result = new ArrayList<String[]>();
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        solQueens(result, list, n);
-        return result;
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> rst = new ArrayList<List<String>>();
+        if (n <= 0) {
+            return rst;
+        }
+        solve(rst, new int[n], 0);
+        return rst;
     }
-    public void solQueens(List<String[]> result, ArrayList<Integer> list, int n) {
-        if (list.size() == n) {
-            result.add(draw(list, n));
+    private void solve(List<List<String>> rst, int[] board, int pos) {
+        if (pos >= board.length) {
+            draw(rst, board);
             return;
         }
-        for (int i = 0; i < n; i++) {
-            if (noAttack(list, i)) {
-                list.add(i);
-                solQueens(result, list, n);
-                list.remove(list.size() - 1);
+        for (int i = 0; i < board.length; i++) {
+            if (isValid(board, i, pos)) {
+                board[pos] = i;
+                solve(rst, board, pos + 1);
             }
         }
     }
-    public boolean noAttack(ArrayList<Integer> list, int colPos) {
-        int rowPos = list.size(); 
-        for (int row = 0; row < list.size(); row++) {
-            int col = list.get(row);
-            if ((col == colPos) || (Math.abs(row - rowPos) == Math.abs(col - colPos))) {
+    private boolean isValid(int[] board, int num, int pos) {
+        for (int i = 0; i < pos; i++) {
+            if (board[i] == num || Math.abs(board[i] - num) == Math.abs(i - pos)) {
                 return false;
             }
         }
         return true;
     }
-    public String[] draw(ArrayList<Integer> queens, int n) {
-        String[] board = new String[n];
-        for (int i = 0; i < queens.size(); i++) {
-            StringBuilder row = new StringBuilder();
-            for (int j = 0; j < n; j++) {
-                if (j == queens.get(i)) {
-                    row.append('Q');
+    private void draw(List<List<String>> rst, int[] board) {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < board.length; i++) {
+            StringBuilder sb = new StringBuilder();
+            for(int j = 0; j < board.length; j++) {
+                if (board[i] == j) {
+                    sb.append('Q');
                 } else {
-                    row.append('.');
+                    sb.append('.');
                 }
             }
-            board[i] = row.toString();
+            list.add(sb.toString());
         }
-        return board;
+        rst.add(list);
     }
 }

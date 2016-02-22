@@ -9,6 +9,10 @@ public class SimplifyPath {
         }
         ArrayList<String> stack = new ArrayList<String>();
         int start = 0;
+        /*
+         * 字符串分割的问题，这里的思路是，如果碰到分隔符，就起始位加一，如果不是分隔符
+         * 而下一位是分隔符，就用之前的起始位执行分割. 这样能有效忽略中间连续的分隔符
+         */
         for (int i = 0; i < path.length(); i++) {
             if (path.charAt(i) == '/') {
                 start = i + 1;

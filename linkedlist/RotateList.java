@@ -1,23 +1,28 @@
 package linkedlist;
 
 public class RotateList {
-    public ListNode rotateRight(ListNode head, int n) {
-        if (head == null) return null;
-        ListNode tail = head, work = head;
-        int rotate, length = 1;
-        while (tail.next != null) {
-            tail = tail.next;
-            length++;
+	public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || k == 0) {
+            return head;
         }
-        rotate = n % length;
-        if (rotate == 0) return head;
-        while (rotate < length - 1) {
-            work = work.next;
-            rotate++;
+        ListNode tail = head;
+        int len = 1;
+        while (tail.next != null) {
+            len++;
+            tail = tail.next;
+        }
+        k = len - k % len;
+        if (k == len) {
+            return head;
+        }
+        ListNode cur = head;
+        while (--k > 0) {
+            cur = cur.next;
         }
         tail.next = head;
-        ListNode newHead = work.next;
-        work.next = null;
-        return newHead;
+        head = cur.next;
+        cur.next = null;
+        
+        return head;
     }
 }

@@ -4,37 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextJustification {
-    public List<String> fullJustify(String[] words, int L) {
+    public List<String> fullJustify(String[] words, int maxWidth) {
         List<String> justified = new ArrayList<String>();
-        if (words == null) {
-            return null;
+        if (words == null || words.length == 0) {
+            return justified;
         }
-        int len = words.length;
         int charCount = 0;
+        int len = words.length;
         int start = 0;
         for (int i = 0; i <= len; i++) {
-            if (i == len || charCount + words[i].length() + i - start > L) {
-                StringBuilder buf = new StringBuilder();
+            if (i == len || charCount + words[i].length() + i - start > maxWidth) {
+                StringBuilder sb = new StringBuilder();
                 int wordCount = i - start;
-                if (wordCount == 1 || i == len) {
+                if (i == len || wordCount == 1) {
                     for (int j = start; j < i; j++) {
-                        buf.append(words[j]);
+                        sb.append(words[j]);
                         if (j != i - 1) {
-                            appendSpace(buf, 1);
+                            sb.append(" ");
                         }
                     }
-                    appendSpace(buf, L - buf.length());
+                    appendSpace(sb, maxWidth - sb.length());
                 } else {
-                    int spaceEach = (L - charCount) / (wordCount - 1);
-                    int spaceExtra = (L - charCount) % (wordCount - 1);
+                    int spaceEach = (maxWidth - charCount) / (wordCount - 1);
+                    int spaceExtra = (maxWidth - charCount) % (wordCount - 1);
                     for (int j = start; j < i; j++) {
-                        buf.append(words[j]);
+                        sb.append(words[j]);
                         if (j != i - 1) {
-                            appendSpace(buf, (j - start) < spaceExtra ? spaceEach + 1 : spaceEach);
+                            appendSpace(sb, spaceEach + (spaceExtra-- > 0 ? 1 : 0));
                         }
                     }
                 }
-                justified.add(buf.toString());
+                justified.add(sb.toString());
                 start = i;
                 if (i != len) {
                     charCount = words[i].length();
@@ -43,11 +43,11 @@ public class TextJustification {
                 charCount += words[i].length();
             }
         }
-        return justified;
+        return justified;        
     }
-    private void appendSpace(StringBuilder s, int count) {
+    private void appendSpace(StringBuilder sb, int count) {
         for (int i = 0; i < count; i++) {
-            s.append(' ');
+            sb.append(" ");
         }
     }
 }

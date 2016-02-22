@@ -8,18 +8,17 @@ package dp.sequence;
  * 优化：因为只跟前面一个值有关，所以可以不用数组，只用一个数代替
  */
 public class JumpGame {
-    public boolean canJump(int[] A) {
-        int max = A[0];
-        for (int i = 1; i < A.length; i++) {
-            if (i <= max) {
-                max = Math.max(max, i + A[i]);
-                if (max >= A.length - 1) {
-                    return true;
-                }
-            } else {
-                return false;
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        int max = 0;
+        for (int i = 0; i <= max; i++) {
+            max = Math.max(max, i + nums[i]);
+            if (max >= nums.length - 1) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

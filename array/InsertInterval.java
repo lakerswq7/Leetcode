@@ -4,45 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsertInterval {
-	public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+    public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+        if (intervals == null || newInterval == null) {
+            return intervals;
+        }
         List<Interval> rst = new ArrayList<Interval>();
-        if (intervals == null || intervals.size() == 0) {
-            rst.add(newInterval);
-            return rst;
-        }
-        ArrayList<Integer> inter = new ArrayList<Integer>();
-        ArrayList<Integer> left = new ArrayList<Integer>();
-        ArrayList<Integer> right = new ArrayList<Integer>();
-        for (Interval e : intervals) {
-            left.add(e.start);
-            right.add(e.end);
-        }
-        addElement(left, newInterval.start);
-        addElement(right, newInterval.end);
-        
-        int l = 0, r = 0;
-        while (l < left.size() || r < right.size()) {
-            if (l < left.size() && left.get(l) <= right.get(r)) {
-                inter.add(left.get(l));
-                l++;
+        int pos = 0;
+        for (Interval i : intervals) {
+            if (i.end < newInterval.start) {
+                rst.add(i);
+                pos++;
+            } else if (newInterval.end < i.start) {
+                rst.add(i);
             } else {
-                if (inter.size() == 1) {
-                    rst.add(new Interval(inter.get(0), right.get(r)));
-                }
-                inter.remove(inter.size() - 1);
-                r++;
+                newInterval.start = Math.min(newInterval.start, i.start);
+                newInterval.end = Math.max(newInterval.end, i.end);
             }
         }
+        rst.add(pos, newInterval);
         return rst;
-    }
-    public void addElement(ArrayList<Integer> list, int e) {
-        for (int i = 0; i < list.size(); i++) {
-            if (e < list.get(i)) {
-                list.add(i, e);
-                return;
-            }
-        }
-        list.add(e);
     }
     public static void main(String[] args) {
     	InsertInterval sol = new InsertInterval();
