@@ -5,27 +5,30 @@ import java.util.List;
 
 public class UniqueBinarySearchTreesII {
     public List<TreeNode> generateTrees(int n) {
-        List<TreeNode> result = generateTreesHelp(1, n);
-        return result;
+        if (n == 0) {
+            return new ArrayList<TreeNode>();
+        }
+        return generate(1, n);
     }
-    public ArrayList<TreeNode> generateTreesHelp(int start, int end) {
-        ArrayList<TreeNode> result = new ArrayList<TreeNode>();
+    private List<TreeNode> generate(int start, int end) {
+        List<TreeNode> list = new ArrayList<TreeNode>();
         if (start > end) {
-            result.add(null);
-            return result;
+            list.add(null);
+            return list;
         }
         for (int i = start; i <= end; i++) {
-            ArrayList<TreeNode> lefts = generateTreesHelp(start, i - 1);
-            ArrayList<TreeNode> rights = generateTreesHelp(i + 1, end);
-            for (TreeNode left : lefts) {
-                for (TreeNode right: rights) {
+            List<TreeNode> left = generate(start, i - 1);
+            List<TreeNode> right = generate(i + 1, end);
+            for (TreeNode l : left) {
+                for (TreeNode r : right) {
                     TreeNode root = new TreeNode(i);
-                    root.left = left;
-                    root.right = right;
-                    result.add(root);
+                    root.left = l; 
+                    root.right = r;
+                    list.add(root);
                 }
             }
+            
         }
-        return result;
-    }
+        return list;
+    }    
 }

@@ -5,37 +5,45 @@ import java.util.List;
 
 public class RestoreIPAddresses {
     public List<String> restoreIpAddresses(String s) {
-        List<String> ips = new ArrayList<String>();
-        if ((s == null) || (s.length() < 4) || (s.length() > 12)) {
-            return ips;
+        List<String> ip = new ArrayList<String>();
+        if (s == null || s.length() < 4 || s.length() > 12) {
+            return ip;
         }
-        helper(s, ips, new ArrayList<String>(), 0);
-        return ips;
+        restoreIP(ip, new ArrayList<String>(), s, 0);
+        return ip;
     }
-    public void helper(String s, List<String> ips, List<String> list, int start) {
-        if ((list.size() == 4) && (start == s.length())) {
-            StringBuilder ip = new StringBuilder();
-            for (String n : list) {
-                ip.append(".");
-                ip.append(n);
-            }
-            ips.add(ip.substring(1));
+    private void restoreIP(List<String> ip, ArrayList<String> list, String s, int pos) {
+        if (list.size() == 4 && pos == s.length()) {
+            addToIP(ip, list);
             return;
         }
-        for (int i = start; i < Math.min(s.length(), start + 3); i++) {
-            String digit = s.substring(start, i + 1);
+        if (list.size() == 4 || pos == s.length()) {
+            return;
+        }
+        for (int i = pos; i < Math.min(pos + 3, s.length()); i++) {
+            String digit = s.substring(pos, i + 1);
             if (isValid(digit)) {
                 list.add(digit);
-                helper(s, ips, list, i + 1);
+                restoreIP(ip, list, s, i + 1);
                 list.remove(list.size() - 1);
             }
         }
     }
-    public boolean isValid(String digit) {
+    private boolean isValid(String digit) {
         if (digit.charAt(0) == '0') {
-            return digit.equals("0");
+            return digit.length() == 1;
         }
         int num = Integer.parseInt(digit);
-        return (num >= 0) && (num <= 255);
+        return num >= 0 && num <= 255;
+    }
+    private void addToIP(List<String> ip, ArrayList<String> list) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            sb.append(list.get(i));
+            if (i != 3) {
+                sb.append(".");
+            }
+        }
+        ip.add(sb.toString());
     }
 }

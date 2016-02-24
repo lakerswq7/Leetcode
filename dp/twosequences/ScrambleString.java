@@ -72,4 +72,43 @@ public class ScrambleString {
 //        }
 //        return true;
 //    }
+    
+    // dfs, 记忆化搜索，这里注意cache要区别出 A 是，B 考察过 否，C 还没考察不知道
+//    public boolean isScramble(String s1, String s2) {
+//        if (s1 == null || s2 == null || s1.length() != s2.length()) {
+//            return false;
+//        }
+//        if (s1.length() == 0 || s1.equals(s2)) {
+//            return true;
+//        }
+//        
+//        int n = s1.length();
+//        int[][][] cache = new int[n][n][n];
+//        return isScrambleHelper(s1, s2, 0, 0, n, cache);
+//    }
+//    private boolean isScrambleHelper(String s1, String s2, int i, int j, int k, int[][][] cache) {
+//        if (cache[i][j][k - 1] == 2) {
+//            return true;
+//        } else if (cache[i][j][k - 1] == 1) {
+//            return false;
+//        }
+//        if (k == 1) {
+//            if (s1.charAt(i) == s2.charAt(j)) {
+//                cache[i][j][k - 1] = 2;
+//                return true;
+//            } else {
+//                cache[i][j][k - 1] = 1;
+//                return false;
+//            }
+//        }
+//        for (int m = 1; m < k; m++) {
+//            if ((isScrambleHelper(s1, s2, i, j, m, cache) && isScrambleHelper(s1, s2, i + m, j + m, k - m, cache))
+//            || (isScrambleHelper(s1, s2, i, j + k - m, m, cache) && isScrambleHelper(s1, s2, i + m, j, k - m, cache))) {
+//                cache[i][j][k - 1] = 2;
+//                return true;
+//            }
+//        }
+//        cache[i][j][k - 1] = 1;
+//        return false;
+//    }
 }
