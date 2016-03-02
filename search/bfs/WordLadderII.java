@@ -42,9 +42,8 @@ public class WordLadderII {
         queue.offer(start);
         dictionary.remove(start);
         int level = 2;
-        boolean stop = false;
         
-        while (!queue.isEmpty() && !stop) {
+        while (!queue.isEmpty() && !map.containsKey(end)) {
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 String cur = queue.poll();
@@ -55,7 +54,6 @@ public class WordLadderII {
                             if (map.containsKey(temp)) {
                                 map.get(temp).addPre(cur);
                             } else {
-                                stop = true;
                                 map.put(temp, new Node(level, cur));
                             }
                             continue;

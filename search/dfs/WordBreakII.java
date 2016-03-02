@@ -6,31 +6,61 @@ import java.util.List;
 import java.util.Set;
 
 public class WordBreakII {
-    public List<String> wordBreak(String s, Set<String> dict) {
-        if (s == null || dict == null || s.length() == 0) {
+	// DFS + memorization
+    public List<String> wordBreak(String s, Set<String> wordDict) {
+        if (s == null || s.length() == 0) {
             return null;
         }
         HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-        for (int i = s.length() - 1; i >= 0; i--) {
-            ArrayList<String> sentence = new ArrayList<String>();
-            String init = s.substring(i);
-            if (dict.contains(init)) {
-                sentence.add(init);
-            }
-            for (int j = i + 1; j < s.length(); j++) {
-                String temp = s.substring(i, j);
-                if (dict.contains(temp)) {
-                    ArrayList<String> sents = map.get(s.substring(j));
-                    for (String sen : sents) {
-                        sentence.add(temp + " " + sen);
-                    }
+        return getSent(s, wordDict, map, 0);
+    }
+    private ArrayList<String> getSent(String s, Set<String> wordDict, HashMap<String, ArrayList<String>> map, int pos) {
+        String cur = s.substring(pos);
+        if (map.containsKey(cur)) {
+            return map.get(cur);
+        }
+        ArrayList<String> sentence = new ArrayList<String>();
+        if (wordDict.contains(cur)) {
+            sentence.add(cur);
+        }
+        for (int i = pos + 1; i < s.length(); i++) {
+            String left = s.substring(pos, i);
+            if (wordDict.contains(left)) {
+                ArrayList<String> right = getSent(s, wordDict, map, i);
+                for (String r : right) {
+                    sentence.add(left + " " + r);
                 }
             }
-            map.put(init, sentence);
         }
-        return map.get(s);
+        map.put(cur, sentence);
+        return sentence;
     }
-// DP的思想，正面算就TLE，反面算就AC， test case的问题
+// DP的思想，正面算就TLE，反面算就AC， test case的问题, 正面:
+//    public List<String> wordBreak(String s, Set<String> dict) {
+//        if (s == null || dict == null || s.length() == 0) {
+//            return null;
+//        }
+//        HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+//        for (int i = s.length() - 1; i >= 0; i--) {
+//            ArrayList<String> sentence = new ArrayList<String>();
+//            String init = s.substring(i);
+//            if (dict.contains(init)) {
+//                sentence.add(init);
+//            }
+//            for (int j = i + 1; j < s.length(); j++) {
+//                String temp = s.substring(i, j);
+//                if (dict.contains(temp)) {
+//                    ArrayList<String> sents = map.get(s.substring(j));
+//                    for (String sen : sents) {
+//                        sentence.add(temp + " " + sen);
+//                    }
+//                }
+//            }
+//            map.put(init, sentence);
+//        }
+//        return map.get(s);
+//    }
+// DP的思想，正面算就TLE，反面算就AC， test case的问题, 反面:
 //    public List<String> wordBreak(String s, Set<String> dict) {
 //        if (s == null || dict == null || s.length() == 0) {
 //            return null;
