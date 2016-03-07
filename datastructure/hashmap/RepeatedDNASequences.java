@@ -19,7 +19,7 @@ public class RepeatedDNASequences {
         map.put('C', 1);
         map.put('G', 2);
         map.put('T', 3);
-        
+        // 因为只有4个候选，所以做了四进制编码, 其实没有必要，HashMap里就放String就行了
         for (int i = 0; i < s.length(); i++) {
             key = ((key << 2) + map.get(s.charAt(i))) & mask;
             if (i >= 9) {

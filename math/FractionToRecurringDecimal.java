@@ -8,33 +8,29 @@ public class FractionToRecurringDecimal {
             return null;
         }
         StringBuilder rst = new StringBuilder();
-        StringBuilder decimal = new StringBuilder();
-        HashMap<Long, Integer> map = new HashMap<Long, Integer>();
         if ((numerator < 0 && denominator > 0) || (numerator > 0 && denominator < 0)) {
             rst.append('-');
         }
-        long numer = Math.abs((long)numerator);
-        long denomin = Math.abs((long)denominator);
-        rst.append(numer / denomin);
-        long remain = numer % denomin;
-        if (remain != 0) {
+        long nume = Math.abs((long)numerator);
+        long deno = Math.abs((long)denominator);
+        rst.append(nume / deno);
+        long remain = nume % deno;
+        if (remain > 0) {
             rst.append('.');
         }
+        StringBuilder decimal = new StringBuilder();
+        HashMap<Long, Integer> dup = new HashMap<Long, Integer>();
         int index = 0;
-        while(remain != 0) {
-            if (!map.containsKey(remain)) {
-                map.put(remain, index);
-            } else {
-                decimal.insert(map.get(remain), "(");
+        while (remain > 0) {
+            if (dup.containsKey(remain)) {
+                decimal.insert(dup.get(remain), "(");
                 decimal.append(')');
                 break;
             }
-            remain *= 10;
-            decimal.append(remain / denomin);
-            index++;
-            remain %= denomin;
+            dup.put(remain, index++);
+            decimal.append(remain * 10 / deno);
+            remain = remain * 10 % deno;
         }
-        rst.append(decimal);
-        return rst.toString();
+        return rst.append(decimal).toString();
     }
 }

@@ -2,38 +2,30 @@ package string;
 
 public class OneEditDistance {
     public boolean isOneEditDistance(String s, String t) {
-        if (s == null || t == null) {
+        if (s == null || t == null || Math.abs(s.length() - t.length()) > 1) {
             return false;
         }
-        if (Math.abs(s.length() - t.length()) > 1) {
-            return false;
-        }
-        int sp = 0;
-        int tp = 0;
-        boolean isDif = false;
-        while (sp < s.length() || tp < t.length()) {
-            if (sp < s.length() && tp < t.length() && s.charAt(sp) == t.charAt(tp)) {
-                sp++;
-                tp++;
+        int i1 = 0;
+        int i2 = 0;
+        boolean hasDif = false;
+        while (i1 < s.length() || i2 < t.length()) {
+            if (i1 < s.length() && i2 < t.length() && s.charAt(i1) == t.charAt(i2)) {
+                i1++;
+                i2++;
+            } else if (hasDif) {
+                return false;
             } else {
-                if (isDif) {
-                    return false;
-                }
                 if (s.length() > t.length()) {
-                    sp++;
+                    i1++;
                 } else if (s.length() < t.length()) {
-                    tp++;
+                    i2++;
                 } else {
-                    sp++;
-                    tp++;
+                    i1++;
+                    i2++;
                 }
-                isDif = true;
+                hasDif = true;
             }
         }
-        if (isDif) {
-            return true;
-        } else {
-            return false;
-        }
+        return hasDif;
     }
 }

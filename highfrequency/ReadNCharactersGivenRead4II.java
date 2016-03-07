@@ -1,35 +1,33 @@
 package highfrequency;
 
 public class ReadNCharactersGivenRead4II {
-    private int start = 0;
-    private int end = 0;
-    private char[] temp = new char[4];
+    char[] cache = new char[4];
+    int start = 0;
+    int end = 0;
     public int read(char[] buf, int n) {
-        int count = 0;
-        int c = end - start;
-        while (count < n) {
-            if (end == start) {
-                c = read4(temp);
-                start = 0;
+        int already = 0;
+        for (int i = 0; i < n && start != end; i++) {
+            buf[already] = cache[start];
+            start = (start + 1) % 4;
+            already++;
+        }
+        char[] temp = new char[4];
+        while (already < n) {
+            int read = read4(temp);
+            int count = Math.min(n - already, read);
+            for (int i = 0; i < count; i++) {
+                buf[already] = temp[i];
+                already++;
             }
-            end = start + Math.min(n - count, c);
-            for (int i = start; i < end; i++) {
-                buf[count] = temp[i];
-                count++;
+            for (int i = count; i < read; i++) {
+                cache[end] = temp[i];
+                end = (end + 1) % 4;
             }
-            if ((end - start) < c) {
-                c = c - (end - start);
-                start = end;
-                end = start + c;
-            } else {
-                c = 0;
-                start = end;
-            }
-            if (end < 4) {
+            if (count < 4) {
                 break;
             }
         }
-        return count;
+        return already;
     }
     private int s = 6;
     public int read4(char[] buf) {
