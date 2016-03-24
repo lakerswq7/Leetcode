@@ -3,7 +3,9 @@ package datastructure.deque;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-
+/*
+ * 实际上就是实现最大最小queue的过程
+ */
 public class SlidingWindowMaximum {
     public int[] maxSlidingWindow(int[] nums, int k) {
         if (nums.length == 0) {

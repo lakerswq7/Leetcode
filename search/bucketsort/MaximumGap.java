@@ -1,4 +1,4 @@
-package math;
+package search.bucketsort;
 
 import java.util.Arrays;
 /*
