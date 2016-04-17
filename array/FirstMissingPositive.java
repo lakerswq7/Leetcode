@@ -22,8 +22,4 @@ public class FirstMissingPositive {
         nums[a] = nums[b];
         nums[b] = temp;
     }
-	public static void main(String[] args) {
-		int[] a = new int[]{2, 1};
-		System.out.println(new FirstMissingPositive().firstMissingPositive(a));
-	}
 }
