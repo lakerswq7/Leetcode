@@ -24,8 +24,11 @@ public class FlattenNestedListIterator {
 
 	    @Override
 	    public Integer next() {
-	        int val = cur.get(pos).getInteger();
-	        pos++;
+	        int val = 0;
+	        if (hasNext()) {
+	            val = cur.get(pos).getInteger();
+	            pos++;
+	        }
 	        return val;
 	    }
 
