@@ -1,35 +1,25 @@
 package array;
 
 public class MaximumProductSubarray {
-    public int maxProduct(int[] A) {
-        if ((A == null) || (A.length == 0)) {
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
             return 0;
         }
-        if (A.length == 1) {
-            return A[0];
+        if (nums.length == 1) {
+            return nums[0];
         }
-        int pos = 0;
-        int neg = 0;
-        int max = 0;
-        int temp;
-        for (int i = 0; i < A.length; i++) {
-            if (A[i] >= 0) {
-                pos = Math.max(pos * A[i], A[i]);
-                neg = neg * A[i];
-                max = Math.max(pos, max);
+        int pos = 0, neg = 0, max = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] >= 0) {
+                pos = Math.max(pos * nums[i], nums[i]);
+                neg = neg * nums[i];
             } else {
-                temp = pos;
-                pos = neg * A[i];
-                neg = Math.min(temp * A[i], A[i]);
-                max = Math.max(pos, max);
+                int temp = pos;
+                pos = neg * nums[i];
+                neg = Math.min(temp * nums[i], nums[i]);
             }
-            System.out.println(pos + " " + neg);
+            max = Math.max(max, pos);
         }
         return max;
-    }
-    public static void main(String[] args) {
-    	int[] a = {-4, -3};
-    	MaximumProductSubarray sol = new MaximumProductSubarray();
-    	System.out.println(sol.maxProduct(a));
     }
 }
