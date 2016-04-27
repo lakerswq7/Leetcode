@@ -6,18 +6,17 @@ import java.util.Queue;
 import java.util.Set;
 
 public class WordLadder {
-	public int ladderLength(String start, String end, Set<String> dict) {
-        if ((start == null) || (end == null) || (dict == null)) {
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        if (beginWord == null || endWord == null || wordList == null) {
             return 0;
         }
-        HashSet<String> dictionary = new HashSet<String>(dict);
+        HashSet<String> dic = new HashSet<String>(wordList);
         int len = 1;
         Queue<String> queue = new LinkedList<String>();
-        queue.offer(start);
-        if (dictionary.contains(start)) {
-            dictionary.remove(start);
+        queue.offer(beginWord);
+        if (dic.contains(beginWord)) {
+            dic.remove(beginWord);
         }
-        
         while (!queue.isEmpty()) {
             int size = queue.size();
             len++;
@@ -25,13 +24,15 @@ public class WordLadder {
                 String cur = queue.poll();
                 for (int j = 0; j < cur.length(); j++) {
                     for (char k = 'a'; k <= 'z'; k++) {
-                        String temp = cur.substring(0, j) + k + cur.substring(j + 1, cur.length());
-                        if (temp.equals(end)) {
+                        char[] a = cur.toCharArray();
+                        a[j] = k;
+                        String temp = new String(a);
+                        if (temp.equals(endWord)) {
                             return len;
                         }
-                        if (dictionary.contains(temp)){
+                        if (dic.contains(temp)) {
                             queue.offer(temp);
-                            dictionary.remove(temp);
+                            dic.remove(temp);
                         }
                     }
                 }

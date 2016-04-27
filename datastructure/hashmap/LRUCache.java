@@ -3,82 +3,68 @@ package datastructure.hashmap;
 import java.util.HashMap;
 
 public class LRUCache {
-    HashMap<Integer, DoublyLinkedListNode> map;
+    HashMap<Integer, Node> map;
     int capacity;
-    int size;
-    DoublyLinkedListNode head;
-    DoublyLinkedListNode tail;
+    Node head;
+    Node tail;
     public LRUCache(int capacity) {
+        map = new HashMap<Integer, Node>();
         this.capacity = capacity;
-        this.size = 0;
-        map = new HashMap<Integer, DoublyLinkedListNode>();
-        head = new DoublyLinkedListNode(-1, -1);
-        tail = new DoublyLinkedListNode(-1, -1);
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
         head.next = tail;
         tail.pre = head;
     }
-
+    
     public int get(int key) {
-    	// 不在就返回 -1
         if (!map.containsKey(key)) {
             return -1;
         }
-        // 在有两种情况： 1. 在链头->直接返回	2. 不在链头->从链里面拿出来，再插到链头
-        DoublyLinkedListNode temp = map.get(key);
-        if (temp != head.next) {
-            temp.next.pre = temp.pre;
-            temp.pre.next = temp.next;
-            
-            head.next.pre = temp;
-            temp.next = head.next;
-            temp.pre = head;
-            head.next = temp;
-        }
-        return temp.value;
+        Node node = map.get(key);
+        removeFromList(node);
+        insertToHead(node);
+        return node.val;
     }
     
     public void set(int key, int value) {
-    	// 如果capacity为0就不能插
         if (capacity == 0) {
             return;
         }
-        DoublyLinkedListNode temp;
-        // 两种情况： 1. 存在->修改值 2. 不存在->新建节点
+        Node node;
         if (map.containsKey(key)) {
-        	// 存在，如果在链头，直接返回； 不在链头， 则拿出，插入链头
-            temp = map.get(key);
-            temp.value = value;
-            if (temp == head.next) {
-                return;
-            }
-            temp.next.pre = temp.pre;
-            temp.pre.next = temp.next;
+            node = map.get(key);
+            node.val = value;
+            removeFromList(node);
         } else {
-        	// 不存在，如果到达capacity，则删除链尾，把新节点插入链头
-            if (size == capacity) {
+            node = new Node(key, value);
+            if (map.size() == capacity) {
                 map.remove(tail.pre.key);
-                tail.pre = tail.pre.pre;
-                tail.pre.next = tail;
-                size--;
+                removeFromList(tail.pre);
             }
-            // 没到达capacity， 则把新节点直接插入链头
-            temp = new DoublyLinkedListNode(key, value);
-            map.put(key, temp);
-            size++;
+            map.put(key, node);
         }
-        head.next.pre = temp;
-        temp.next = head.next;
-        temp.pre = head;
-        head.next = temp;
+        insertToHead(node);
     }
-    class DoublyLinkedListNode {
-        int value;
+    private void insertToHead(Node node) {
+        node.pre = head;
+        node.next = head.next;
+        head.next.pre = node;
+        head.next = node;
+    }
+    private void removeFromList(Node node) {
+        node.pre.next = node.next;
+        node.next.pre = node.pre;
+        node.pre = null;
+        node.next = null;
+    }
+    class Node {
+        Node pre;
+        Node next;
         int key;
-        DoublyLinkedListNode pre;
-        DoublyLinkedListNode next;
-        DoublyLinkedListNode(int key, int value) {
-            this.value = value;
+        int val;
+        Node (int key, int val) {
             this.key = key;
+            this.val = val;
             pre = null;
             next = null;
         }
