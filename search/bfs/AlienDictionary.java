@@ -1,7 +1,7 @@
 package search.bfs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 /**
@@ -32,55 +32,54 @@ There may be multiple valid order of letters, return any one of them is fine.
  * 实际上就是在构建output和input的时候用不同的方式
  */
 public class AlienDictionary {
-    public String alienOrder(String[] words) {
-        HashMap<Character, HashSet<Character>> output = new HashMap<Character, HashSet<Character>>();
+	public String alienOrder(String[] words) {
+        if (words == null || words.length == 0) {
+            return "";
+        }
         HashMap<Character, Integer> input = new HashMap<Character, Integer>();
-        StringBuilder order = new StringBuilder();
-        Queue<Character> queue = new LinkedList<Character>();
-        int count = 0;
-        for (int k = 0; k < words.length; k++) {
-            for (int i = 0; i < words[k].length(); i++) {
-                char c = words[k].charAt(i);
-                if (!output.containsKey(c)) {
-                    output.put(c, new HashSet<Character>());
-                }
-                if (!input.containsKey(c)) {
-                    count++;
-                    input.put(c, 0);
-                }
+        HashMap<Character, ArrayList<Character>> map = new HashMap<Character, ArrayList<Character>>();
+        for (String word : words) {
+            for (int i = 0; i < word.length(); i++) {
+                input.put(word.charAt(i), 0);
             }
         }
-        for (int k = 0; k < words.length; k++) {
-            for (int i = 0; i < words[k].length(); i++) {
-                char c = words[k].charAt(i);
-                if (k != 0 && i < words[k - 1].length() && words[k - 1].charAt(i) != c) {
-                    if (!output.get(words[k - 1].charAt(i)).contains(c)) {
-                        output.get(words[k - 1].charAt(i)).add(c);
-                        input.put(c, input.get(c) + 1);
+        for (int i = 1; i < words.length; i++) {
+            for (int j = 0; j < Math.min(words[i].length(), words[i - 1].length()); j++) {
+                char m = words[i].charAt(j);
+                char n = words[i - 1].charAt(j);
+                if (m != n) {
+                    input.put(m, input.get(m) + 1);
+                    if (!map.containsKey(n)) {
+                        map.put(n, new ArrayList<Character>());
                     }
+                    map.get(n).add(m);
                     break;
                 }
             }
         }
+        Queue<Character> queue = new LinkedList<Character>();
+        StringBuilder sb = new StringBuilder();
         for (char c : input.keySet()) {
             if (input.get(c) == 0) {
                 queue.offer(c);
             }
         }
         while (!queue.isEmpty()) {
-            char cur = queue.poll();
-            order.append(cur);
-            count--;
-            for (char n : output.get(cur)) {
-                input.put(n, input.get(n) - 1);
-                if (input.get(n) == 0) {
-                    queue.offer(n);
+            char c = queue.poll();
+            sb.append(c);
+            if (!map.containsKey(c)) {
+                continue;
+            }
+            for (char next : map.get(c)) {
+                input.put(next, input.get(next) - 1);
+                if (input.get(next) == 0) {
+                    queue.offer(next);
                 }
             }
         }
-        if (count != 0) {
+        if (sb.length() != input.size()) {
             return "";
         }
-        return order.toString();
+        return sb.toString();
     }
 }

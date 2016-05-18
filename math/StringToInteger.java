@@ -1,7 +1,7 @@
 package math;
 
 public class StringToInteger {
-    public int atoi(String str) {
+	 public int atoi(String str) {
         if (str == null) {
             return 0;
         }
