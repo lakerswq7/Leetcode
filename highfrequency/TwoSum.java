@@ -3,17 +3,18 @@ package highfrequency;
 import java.util.HashMap;
 
 public class TwoSum {
-    public int[] twoSum(int[] numbers, int target) {
-        HashMap<Integer, Integer> comp = new HashMap<Integer, Integer>();
-        int[] result = new int[]{0, 0};
-        for (int i = 0; i < numbers.length; i++) {
-            if (comp.containsKey(numbers[i])) {
-                result[0] = comp.get(numbers[i]) + 1;
-                result[1] = i + 1;
+    public int[] twoSum(int[] nums, int target) {
+        int[] rst = new int[2];
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i])) {
+                rst[0] = map.get(nums[i]);
+                rst[1] = i;
+                return rst;
             } else {
-                comp.put(target - numbers[i], i);
+                map.put(target - nums[i], i);
             }
         }
-        return result;
+        return rst;
     }
 }
